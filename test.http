@@ -1,0 +1,22 @@
+# Die erste Zeile eines HTTP Requests enthält das Verb: GET/POST/PUT/DELETE.
+# Diesem folgt der angefragte Pfad (hier die gesamte URL) und die HTTP Version
+POST http://localhost:3000/post HTTP/1.1
+# Die nächsten Zeilen enthalten sogenannte Header
+# diese teilen dem Server beispielsweise mit, dass es sich
+# um JSON Daten handelt (Content-Type) und dass wir als Antwort
+# auch JSON erwarten (Accept)
+Content-Type: application/json
+Accept: application/json
+
+# Die Daten werden abschließend - getrennt durch eine leere Zeile - angegeben.
+{
+    "testdaten": [ 42 ]
+}
+
+
+# Die REST Client Extension erlaubt es in einer Datei mehrere Requests anzugeben.
+# Dazu können die Requests mit 3 # getrennt werden.
+
+###
+
+# Hier kann der nächste Request stehen
