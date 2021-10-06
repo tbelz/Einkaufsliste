@@ -1,16 +1,14 @@
 # Die erste Zeile eines HTTP Requests enthält das Verb: GET/POST/PUT/DELETE.
 # Diesem folgt der angefragte Pfad (hier die gesamte URL) und die HTTP Version
-POST http://localhost:3000/post HTTP/1.1
-# Die nächsten Zeilen enthalten sogenannte Header
-# diese teilen dem Server beispielsweise mit, dass es sich
-# um JSON Daten handelt (Content-Type) und dass wir als Antwort
-# auch JSON erwarten (Accept)
+POST http://localhost:3000/register HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 
-# Die Daten werden abschließend - getrennt durch eine leere Zeile - angegeben.
+# Die Daten, die gesendet werden sollen,
+# werden abschließend - getrennt durch eine leere Zeile - angegeben.
 {
-    "testdaten": [ 42 ]
+    "username": "till",
+    "password": "geheim"
 }
 
 
@@ -20,3 +18,37 @@ Accept: application/json
 ###
 
 # Hier kann der nächste Request stehen
+POST http://localhost:3000/login HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "till",
+    "password": "geheim"
+}
+
+###
+
+POST http://localhost:3000/login HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "till",
+    "password": "geheim"
+}
+
+###
+POST http://localhost:3000/einkaufsliste HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "einkaufsliste1"
+}
+
+###
+
+GET http://localhost:3000/einkaufsliste HTTP/1.1
+Content-Type: application/json
+Accept: application/json
