@@ -1,0 +1,30 @@
+[
+    {
+    "username": "Till",
+    "passwordDerivative": "geheim",
+    "auth": ["kjmvrekvkj"],
+    "listen": [
+        {        
+            "name": "ALDI",
+            "einträge":[
+                { "namen": "Apfel", "anzahl": 4, "abgehakt": true, "gang": "5"}
+            ]
+        }
+
+    ]
+    },
+    {
+        "username": "Philip",
+        "passwort": "geheim",
+        "listen": [
+            {        
+                "name": "ALDI",
+                "einträge":[
+                    { "namen": "Apfel", "anzahl": 4, "abgehakt": true, "gang": "5"}
+                ]
+            }
+    
+        ]
+    }
+]
+
