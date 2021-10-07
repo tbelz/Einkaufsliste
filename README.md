@@ -59,17 +59,18 @@ Status Codes:
 ## Items
 Hinzufügen:
 HTTP-Verb: POST
-Pfad: /einkaufsliste/<nameListe>
+Pfad: /einkaufsliste/<idListe>
 Header:connect.sid
 Status Codes:
 - 200: Item added
+- 400: Invalid argument
 - 401: Authentication is required
 - 403: Item already exists
 - 404: List not Found
 
 Aktualisieren:
 HTTP-Verb: PUT
-Pfad: /einkaufsliste/<nameListe>/<nameItem>
+Pfad: /einkaufsliste/<idListe>/<nameItem>
 Header:connect.sid
 Status Codes:
 Status Codes:
@@ -81,7 +82,7 @@ Status Codes:
 
 Löschen:
 HTTP-Verb: DELETE
-Pfad: /einkaufsliste/<nameListe>/<nameItem>
+Pfad: /einkaufsliste/<idListe>/<nameItem>
 Header:connect.sid
 Status Codes:
 - 200: Item deleted
