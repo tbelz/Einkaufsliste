@@ -7,7 +7,7 @@
         {        
             "name": "ALDI",
             "einträge":[
-                { "namen": "Apfel", "anzahl": 4, "abgehakt": true, "gang": "5"}
+                { "art": "Apfel", "anzahl": 4,"einheit": "Stück", "abgehakt": true}
             ]
         }
 
@@ -20,7 +20,7 @@
             {        
                 "name": "ALDI",
                 "einträge":[
-                    { "namen": "Apfel", "anzahl": 4, "abgehakt": true, "gang": "5"}
+                    { "art": "Milch", "anzahl": 400, "einheit": "ml", "abgehakt": true}
                 ]
             }
     
