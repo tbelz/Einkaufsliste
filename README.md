@@ -87,7 +87,6 @@ Header:connect.sid
 Status Codes:
 - 200: Item deleted
 - 401: Authentication is required
-- 403: Item already exists
 - 404: List/Item not Found
 
 

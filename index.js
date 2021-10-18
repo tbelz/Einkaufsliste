@@ -45,7 +45,7 @@ app.listen(port, () => {
 app.post('/register', function(req, res) {
   if(validateUser(req.body)){
     if(!userExits(req.body.username)){
-      users.push({username: req.body.username, passwordDerivative: derivePassword(req.body.password)})
+      users.push({username: req.body.username, passwordDerivative: derivePassword(req.body.password), listen:[]})
       const token = jwt.sign(
         {username: req.body.username },
         process.env.TOKEN_KEY,
@@ -98,7 +98,7 @@ function verifyCookie(req){
     else{
       try {
       const decoded = jwt.verify(token, process.env.TOKEN_KEY)
-      req.username = getUser(decoded);
+      req.username = decoded.username;
       } 
       catch(err) {
         return false;
@@ -115,6 +115,7 @@ function userExits(username){
 }
 
 function getUser(username){
+  //console.log(users)
   const user = users.filter(singleUser => { return singleUser.username === username});
   return user[0];
 }
@@ -156,7 +157,7 @@ app.post('/einkaufsliste', function(req, res) {
     }
     else{
       let liste = {"name": req.body.name, "einträge": []}
-      getUser("till").listen.push(liste);
+      getUser(req.username).listen.push(liste);
       res.status(200).json({
         success: 'List created'
       });
@@ -173,19 +174,21 @@ app.post('/einkaufsliste', function(req, res) {
 
 // unten stehende Funktionen nicht relevant für die Abgabe
 
-/*app.post('/einkaufsliste/:idListe', function(req, res){
+app.post('/einkaufsliste/:idListe', function(req, res){
     if(verifyCookie(req) === true){
-      let list = getUser(req.username).listen.filter(o => { return o.id == req.params.idListe })[0]
+      console.log(getUser(req.username), req.username);
+      let list = getUser(req.username).listen.filter(o => { return o.name == req.params.idListe })[0]
       if(list !== undefined){
-        if(validateItem === true){
-          if(undefined !== list.filter(item => { return item.art === req.body.art })[0]){
+        if(validateItem(req.body) === true){
+          if([] !== list.einträge.filter(item => { return item.art === req.body.art })[0]){
             let newItem = req.body;
             newItem.abgehakt = false;
-            list.push(newItem);
+            list.einträge.push(newItem);
             res.status(200).json({
               success: 'Item created'
             });
           }else{
+
             res.status(403).json({
               error: 'Item already exists'
             });
@@ -208,6 +211,65 @@ app.post('/einkaufsliste', function(req, res) {
 });
 
 function validateItem(item){
-  return item.hasOwnProberty("art") && item.hasOwnProberty("anzahl") && typeof item.art === 'string' && item.anzahl.isInteger() && typeof item.einheit === 'string'
+  console.log(item.hasOwnProperty("art") , item.hasOwnProperty("anzahl") , typeof item.art === 'string' , Number.isInteger(item.anzahl) , typeof item.einheit === 'string')
+  return item.hasOwnProperty("art") && item.hasOwnProperty("anzahl") && typeof item.art === 'string' && Number.isInteger(item.anzahl) && typeof item.einheit === 'string'
 }
-*/
+
+app.delete('/einkaufsliste/:idListe/:nameItem', function(req,res){
+  if(verifyCookie(req) === true){
+    let list = getUser(req.username).listen.filter(o => { return o.id == req.params.idListe })[0]
+    if(list !== undefined){
+      let existingItem = list.einträge.filter( o => { return o.art === req.params.nameItem})
+      if(existingItem !== undefined){
+        list.delete(existingItem);
+        res.status(200).json({
+          success: 'Item successfully removed'
+        });
+      }else{
+        res.status(404).json({
+          error: 'Item not found'
+        });
+      }
+    }else{
+      res.status(404).json({
+        error: 'List not found'
+      });
+    }
+  }else{
+    res.status(401).json({
+      error: 'Authentication is required'
+    });
+  }
+});
+
+app.put('/einkaufliste/:idListe/:nameItem', function(req,res){
+  if(verifyCookie(req) === true){
+    console.log("id liste", req.params.idListe);
+    let list = getUser(req.username).listen.filter(o => { return o.id == req.params.idListe })[0]
+    if(list !== undefined){
+     let existingItem = list.einträge.filter( o => { return o.art === req.params.nameItem})
+     if(existingItem !== undefined){
+      let newItem = req.body
+      const index = list.einträge.indexOf(existingItem)
+      if (index !== -1) {
+        list.einträge[index] = newItem;
+    }
+      res.status(200).json({
+        success: 'Item updated'
+      })
+     }else{
+        res.status(404).json({
+         error: 'Item not found'
+        });
+       }
+    }else{
+       res.status(404).json({
+         error: 'List not found'
+      });
+    }
+  }else{
+    res.status(401).json({
+      error: 'Authentication is required'
+    });
+  }
+})

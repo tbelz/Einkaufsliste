@@ -56,4 +56,10 @@ Accept: application/json
 
 ###
 
+POST http://localhost:3000/einkaufsliste/einkaufsliste1/ HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{ "art": "Apfel", "anzahl": 4,"einheit": "Stück"}
+
 
