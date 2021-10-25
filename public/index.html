@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einkaufsliste</title>
+</head>
+<body>
+  <nav>
+    <button class="nav-link" onclick="gotoPage('/')">Übersicht Einkaufsliste</button>
+    <button class="nav-link" onclick="gotoPage('/login')">Login</button>
+  </nav>
+  <article class="page" id="uebersicht-einkaufslisten" hidden>
+    <h1>Benchmark Übersicht</h1>
+    <table>
+      <tr>
+        <th>Einkaufsliste</th>
+        <th>Offene Items</th>
+      </tr>
+    </table>
+  </article>
+  <article class="page" id="login" hidden>
+    <h1>Anmeldung</h1>
+    <form name="login-form" onsubmit="login(event)">
+      <div>
+        <label for="user">Benutzername:</label>
+        <input type="text" name="user"/>
+      </div>
+      <div>
+        <label for="password">Passwort:</label>
+        <input type="password" name="password">
+      </div>
+      <div>
+        <button type="submit" name="login-submit">Absenden</button>
+      </div>
+      <div>
+        <button class="nav-link" onclick="gotoPage('/register')">Registrierung</button>
+      </div>
+    </form>
+  </article>
+  <article class="page" id="register" hidden>
+    <form name="login-form" onsubmit="register(event)">
+      <div>
+        <label for="user">Benutzername:</label>
+        <input type="text" name="user"/>
+      </div>
+      <div>
+        <label for="password1">Passwort</label>
+        <input type="password" name="password1">
+      </div>
+      <div>
+        <label for="password2">Passwort wiederholen:</label>
+        <input type="password" name="password2">
+      </div>
+      <div>
+        <button type="submit" name="register-submit">Absenden</button>
+      </div>
+    </form>
+  </article>
+  <script src="/micro-framework.js"></script>
+  <script src="/script.js"></script>
+</body>
+</html>
