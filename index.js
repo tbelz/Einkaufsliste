@@ -147,15 +147,16 @@ function derivePassword(password){
 
 // Abrufen von Bespieldaten und nicht von durch Nutzer erstellte Liste
 
-app.get('/einkaufsliste', function(req, res) {
+app.get('/einkaufslisten', function(req, res) {
   //User Till ist Platzhalter um Musterdaten abzurufen
   let UserEinkaufslisten = getUser("till").listen;
-  res.json(UserEinkaufslisten);
+  res.json({"a" :"hallo"});
+  //res.json(UserEinkaufslisten);
 });
 
 // Anlegen von Ressource mit Authentifizierung
 
-app.post('/einkaufsliste', function(req, res) {
+app.post('/einkaufslisten', function(req, res) {
   if(verifyCookie(req)){
     if(req.body.name === undefined){
       res.status(400).json({
@@ -181,7 +182,7 @@ app.post('/einkaufsliste', function(req, res) {
 
 // unten stehende Funktionen nicht relevant für die Abgabe
 
-app.post('/einkaufsliste/:idListe', function(req, res){
+app.post('/einkaufslisten/:idListe/items', function(req, res){
     if(verifyCookie(req) === true){
       console.log(getUser(req.username), req.username);
       let list = getUser(req.username).listen.filter(o => { return o.name == req.params.idListe })[0]

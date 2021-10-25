@@ -22,7 +22,9 @@ function removeElements(elementSelector) {
 
 async function renderUebersichtEinkaufslisten() {
   console.log("Rerender overview")
-  const einkaufslisten = await getJSon("/einkaufsliste")
+  
+  const einkaufslisten = await getJSon("/einkaufslisten")
+  console.log(einkaufslisten);
   const table = document.querySelector("#uebersicht-einkaufslisten table");
   removeElements("#benchmarks-overview .shoppingListInfo")
 
@@ -84,15 +86,34 @@ async function register(event){
   gotoPage("/");
 
 }
-
+/*
 async function getJSon(path){
-  const result = await fetch("/einkaufliste");
-  if(res.status >= 200 && result.status < 300){
-    return result.json();
+  const result = await fetch("/einkaufslisten");
+  if(result.status >= 200 && result.status < 300){
+    console.log(await result.json())
+    const json = 
+    console.log("1");
+    console.log(json);
+    return json;
   } else {
     alert("Anfrage fehlerhaft.");
   }
 }
+*/
+
+async function getJSon(path) {
+  const result = await fetch(path);
+
+  if (!result.ok) {
+    alert("Fehler beim Abruf der Benchmarks")
+    return [];
+  }
+  console.log(result);
+  const benchmarks = await result.json();
+  console.log(result);
+  return benchmarks;
+}
+
 
 async function postJson(obj, path) {
   const res = await fetch(path, {
@@ -105,7 +126,7 @@ async function postJson(obj, path) {
   });
   
    // oder result.ok
-   if(res.status >= 200 && result.status < 300) {
+   if(result.status >= 200 && result.status < 300) {
     return parse(res.json())
   } else {
     return false;
@@ -134,9 +155,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // trigger the initial page navigation after routes are registered
   // reads the url an navigates to the given page
 
-
+  console.log("1");
   registerRoute("/", "uebersicht-einkaufslisten", guard);
-  registerRoute("/einkaufsliste", "uebersicht-einkaufslisten", guard);
+  registerRoute("/einkaufslisten", "uebersicht-einkaufslisten", guard);
   registerRoute("/login", "login", reverseGuard);
   registerRoute("/register", "register", reverseGuard);
 
