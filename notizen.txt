@@ -1,0 +1,30 @@
+Seiten:
+-   Einkaufsliste amzeigen
+    -   Items abhaken
+    -   (sortieren)
+-   Items hinzufügen (Formular mit Feldern zur Eingabe)
+    -  Einheit frei wählbar
+    -  restliche Felder --> Eintrag erforderlich
+
+CSS
+-   Login
+-   Registierung
+-   Übersicht alle Einkaufslisten 1 Users
+-   Übersicht einer Einkaufsliste
+-   Items hinzufügen
+
+
+
+API
+-   get Einkauflisten Funktion fertigstellen ✔️
+-   get Einkaufsliste ✔️
+-   delete Einkauflisten Funktion
+-   testen
+
+
+ToDo:
+-  Sinvolle Fehlermeldungen
+-  Behandlung von Ausnahmen
+-  Guard fixen
+-  logout button // hide Login
+

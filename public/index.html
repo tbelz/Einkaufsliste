@@ -1,64 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="/all.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Einkaufsliste</title>
 </head>
 <body>
-  <nav>
-    <button class="nav-link" onclick="gotoPage('/')">Übersicht Einkaufsliste</button>
+  <nav class="header">
+    <button class="nav-link" onclick="gotoPage('/einkaufsliste/üebersicht')">Übersicht Einkaufsliste</button>
     <button class="nav-link" onclick="gotoPage('/login')">Login</button>
+    
   </nav>
   <article class="page" id="uebersicht-einkaufslisten" hidden>
-    <h1>Benchmark Übersicht</h1>
-    <table>
+    <h1>Einkaufslisten Übersicht</h1>
+    <table class="Tabelle-Einkaufslisten">
       <tr>
         <th>Einkaufsliste</th>
         <th>Offene Items</th>
       </tr>
     </table>
-  </article>
-  <article class="page" id="login" hidden>
-    <h1>Anmeldung</h1>
-    <form name="login-form" onsubmit="login(event)">
-      <div>
-        <label for="user">Benutzername:</label>
-        <input type="text" name="user"/>
-      </div>
-      <div>
-        <label for="password">Passwort:</label>
-        <input type="password" name="password">
-      </div>
-      <div>
-        <button type="submit" name="login-submit">Absenden</button>
-      </div>
-      <div>
-        <button class="nav-link" onclick="gotoPage('/register')">Registrierung</button>
+    <button type="button" class="btn btn-default" onclick="showListAdd(event)">Liste erstellen</button>
+    <form name="addList-form" onsubmit="addList(event)" hidden>
+      <div class="grid-item">
+        <label for="user">Name:</label>
+        <input class="input" type="text" name="listName"/>
       </div>
     </form>
   </article>
+  <article class="page" id="login" hidden>
+    <h1>Anmeldung</h1>
+    <form class="grid-container" name="login-form" onsubmit="login(event)">
+      <div class="grid-item">
+        <label for="user">Benutzername:</label>
+        <input class="input" type="text" name="user"/>
+      </div>
+      <div class="grid-item">
+        <label for="password">Passwort:</label>
+        <input class="input" type="password" name="password">
+      </div>
+      <div class="grid-item">
+        <button type="submit" name="login-submit">Absenden</button>
+      </div>
+    </form>
+    <div class="gird-item2">
+      <button class="nav-link2" onclick="gotoPage('/register')">Registrierung</button>
+    </div>
+  </article>
   <article class="page" id="register" hidden>
-    <form name="login-form" onsubmit="register(event)">
-      <div>
+    <form class="grid-container" name="register-form" onsubmit="register(event)">
+      <div class="grid-item">
         <label for="user">Benutzername:</label>
         <input type="text" name="user"/>
       </div>
-      <div>
+      <div class="grid-item">
         <label for="password1">Passwort</label>
         <input type="password" name="password1">
       </div>
-      <div>
+      <div class="grid-item">
         <label for="password2">Passwort wiederholen:</label>
         <input type="password" name="password2">
       </div>
-      <div>
+      <div class="grid-item">
         <button type="submit" name="register-submit">Absenden</button>
       </div>
     </form>
   </article>
+  <article class="page" id="shoppingList" hidden>
+    <button class="button2" onclick="openAddItem()">Item Hinzufügen</button>
+    <button class="buttonDeleteList" onclick="deleteActiveList()">Liste Löschen</button>
+    <table class="tabelle">
+      <tr>
+        <th>Bezeichnung</th>
+        <th>Menge</th>
+        <th>Einheit</th>
+        <th>Erledigt</th>
+        <th></th>
+      </tr>
+    </table>
+  </article>
+  <article class="page" id="addItem" hidden>
+    <form class="form1" name="addItem-form" onsubmit="addItem(event)">
+      <div class="grid-label">
+        <label class ="labeladditem" id="addItemName" for="name">Name:</label>
+        <label class ="labeladditem" id="addItemMenge" for="menge">Menge:</label>
+        <label class ="labeladditem" id="addItemEinheit" for="einheit" >Einheit:</label>
+      </div>
+      <div class="grid-input">
+        <input type="text" name="name" id="addItemName" required>
+        <input type="number" name="menge" id="addItemMenge" value=1 required>
+        <input type="text" name="einheit" id="addItemEinheit">
+      </div>
+      <div class="grid-button">
+        <button id="addItemButton" name="addItem-submit"> Erstellen</button>
+      </div>
+    </form>
+    <button class="button2" onclick="backToList()">zurück</button>
+  </article>
+  
+  <article class="page" id="redirect" onpageshow="gotoPage('/login')" hidden>
+  </article>
   <script src="/micro-framework.js"></script>
+  <script src="/json.js"></script>
   <script src="/script.js"></script>
+  <script src="/reactWannabe.js"></script>
 </body>
 </html>

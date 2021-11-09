@@ -37,9 +37,6 @@ app.use(express.static('public'));
 
 
 
-app.get( "*", function( req, res ) {
-  res.sendFile( pathUtils.resolve("public", "index.html" ) );
-});
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
@@ -97,6 +94,17 @@ app.post('/login', function(req, res) {
   else{res.status(400).json({error: "No or invalid argument for user or password."})}
 });
 
+
+app.get('/loginStatus', function(req, res) {
+  if(verifyCookie(req)) {
+    res.json({"isLoggedin":"true"});
+  }
+  else{
+    res.json({"isLoggedin":"false"});
+  }
+  
+});
+
 function verifyCookie(req){
     const token = req.cookies.token;
     if (token === undefined) {
@@ -106,6 +114,9 @@ function verifyCookie(req){
       try {
       const decoded = jwt.verify(token, process.env.TOKEN_KEY)
       req.username = decoded.username;
+      if(!userExits(decoded.username)){
+        return false;
+      }
       } 
       catch(err) {
         return false;
@@ -147,12 +158,48 @@ function derivePassword(password){
 
 // Abrufen von Bespieldaten und nicht von durch Nutzer erstellte Liste
 
-app.get('/einkaufslisten', function(req, res) {
-  //User Till ist Platzhalter um Musterdaten abzurufen
-  let UserEinkaufslisten = getUser("till").listen;
-  res.json({"a" :"hallo"});
-  //res.json(UserEinkaufslisten);
+app.get('/einkaufslisten/:name', function(req, res) {
+  if(verifyCookie(req)) {
+    let UserEinkaufslisten = getUser(req.username).listen;
+    const einkaufliste = UserEinkaufslisten.filter( o => { return o.name === req.params.name});
+    if(einkaufliste.length === 1){
+      res.status(200).json(
+        einkaufliste
+      );
+    }
+    else{
+      res.status(404).json(
+        {
+          error: 'List not Found'
+        }
+      );
+    }
+  }
+  else{
+    res.status(401).json({
+      error: 'Unauthorized'
+    });
+  }
+  
 });
+
+app.get('/einkaufslisten', function(req, res) {
+  if(verifyCookie(req)) {
+    console.log("user:" + req.username );
+    let UserEinkaufslisten = getUser(req.username).listen;
+
+    res.json(UserEinkaufslisten);
+  }
+  else{
+    res.status(401).json({
+      error: 'Unauthorized'
+    });
+  }
+  
+});
+
+
+
 
 // Anlegen von Ressource mit Authentifizierung
 
@@ -164,8 +211,16 @@ app.post('/einkaufslisten', function(req, res) {
       });
     }
     else{
+      let user = getUser(req.username);
+      const matchingItems = user.listen.filter( o => { return o.name === req.body.name});
+      if(matchingItems.length !== 0){
+        res.status(400).json({
+          error: 'Name invalid'
+        });
+        
+      }
       let liste = {"name": req.body.name, "einträge": []}
-      getUser(req.username).listen.push(liste);
+      user.listen.push(liste);
       res.status(200).json({
         success: 'List created'
       });
@@ -180,17 +235,53 @@ app.post('/einkaufslisten', function(req, res) {
   }
 });
 
+app.delete('/einkaufslisten/:name', function(req, res){
+  if(verifyCookie(req) === true){
+    let lists = getUser(req.username).listen;
+    console.log(lists)
+    let existingList = lists.filter(l => { return l.name == req.params.name })[0]
+    if(existingList !== undefined){
+        const index = lists.indexOf(existingList);
+        if (index !== -1) {
+          lists.splice(index, 1);
+        }
+        res.status(200).json({
+          success: 'List successfully removed'
+        }); 
+     }else{
+      res.status(404).json({
+        error: 'List not found'
+      });
+    }
+  }else{
+    res.status(401).json({
+      error: 'Authentication is required'
+    });
+  }
+})
+function getList(user, listName) {
+  let lists = user.listen;
+  lists = lists.filter(l => { return l.name == listName })[0]
+  if(lists.length == 0){
+    return null
+  }
+  return lists
+
+}
 // unten stehende Funktionen nicht relevant für die Abgabe
 
-app.post('/einkaufslisten/:idListe/items', function(req, res){
+app.post('/einkaufslisten/:name/items', function(req, res){
     if(verifyCookie(req) === true){
       console.log(getUser(req.username), req.username);
-      let list = getUser(req.username).listen.filter(o => { return o.name == req.params.idListe })[0]
-      if(list !== undefined){
+      console.log(req.body);
+      console.log(req.params.name)
+      let list = getList(getUser(req.username), req.params.name)
+      
+      if(list != null){
         if(validateItem(req.body) === true){
           if([] !== list.einträge.filter(item => { return item.art === req.body.art })[0]){
             let newItem = req.body;
-            newItem.abgehakt = false;
+            newItem.abgehakt = false; //einheit optional muss aber vorhanden sein
             list.einträge.push(newItem);
             res.status(200).json({
               success: 'Item created'
@@ -202,6 +293,7 @@ app.post('/einkaufslisten/:idListe/items', function(req, res){
             });
           }
         }else{
+          console.log("Validation fail")
           res.status(400).json({
             error: 'Invalid Argument'
           });
@@ -218,18 +310,23 @@ app.post('/einkaufslisten/:idListe/items', function(req, res){
     }
 });
 
-function validateItem(item){
-  console.log(item.hasOwnProperty("art") , item.hasOwnProperty("anzahl") , typeof item.art === 'string' , Number.isInteger(item.anzahl) , typeof item.einheit === 'string')
-  return item.hasOwnProperty("art") && item.hasOwnProperty("anzahl") && typeof item.art === 'string' && Number.isInteger(item.anzahl) && typeof item.einheit === 'string'
+function validateItem(item){ 
+  console.log(item.hasOwnProperty("art") , item.hasOwnProperty("anzahl") , typeof item.art === 'string' , typeof item.einheit === 'string')
+  return item.hasOwnProperty("art") && item.hasOwnProperty("anzahl") && typeof item.art === 'string'  && typeof item.einheit === 'string'
 }
 
-app.delete('/einkaufsliste/:idListe/:nameItem', function(req,res){
+app.delete('/einkaufsliste/:name/:nameItem', function(req,res){
   if(verifyCookie(req) === true){
-    let list = getUser(req.username).listen.filter(o => { return o.id == req.params.idListe })[0]
+    console.log("delete");
+    let list = getUser(req.username).listen.filter(o => { return o.name == req.params.name })[0]
     if(list !== undefined){
       let existingItem = list.einträge.filter( o => { return o.art === req.params.nameItem})
       if(existingItem !== undefined){
-        list.delete(existingItem);
+        const index = list.einträge.indexOf(existingItem[0]);
+        if (index !== -1) {
+          list.einträge.splice(index, 1);
+          console.log(list);
+        }
         res.status(200).json({
           success: 'Item successfully removed'
         });
@@ -250,15 +347,15 @@ app.delete('/einkaufsliste/:idListe/:nameItem', function(req,res){
   }
 });
 
-app.put('/einkaufliste/:idListe/:nameItem', function(req,res){
+app.put('/einkaufsliste/:name/:nameItem', function(req,res){
   if(verifyCookie(req) === true){
-    console.log("id liste", req.params.idListe);
-    let list = getUser(req.username).listen.filter(o => { return o.id == req.params.idListe })[0]
+    let list = getUser(req.username).listen.filter(o => { return o.name == req.params.name })[0]
+    console.log("list:" + list + getUser(req.username));
     if(list !== undefined){
      let existingItem = list.einträge.filter( o => { return o.art === req.params.nameItem})
-     if(existingItem !== undefined){
+     if(existingItem !== []){
       let newItem = req.body
-      const index = list.einträge.indexOf(existingItem)
+      const index = list.einträge.indexOf(existingItem[0])
       if (index !== -1) {
         list.einträge[index] = newItem;
     }
@@ -266,7 +363,7 @@ app.put('/einkaufliste/:idListe/:nameItem', function(req,res){
         success: 'Item updated'
       })
      }else{
-        res.status(404).json({
+        res.status(404).jdocument.cookieson({
          error: 'Item not found'
         });
        }
@@ -280,4 +377,9 @@ app.put('/einkaufliste/:idListe/:nameItem', function(req,res){
       error: 'Authentication is required'
     });
   }
+  
 })
+
+app.get( "*", function( req, res ) {
+  res.sendFile( pathUtils.resolve("public", "index.html" ) );
+});
