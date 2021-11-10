@@ -17,25 +17,23 @@
 
 .header {
     background-color: var(--main-color2); 
-    padding: 0%;
+    padding: 1%;
 }
 
-.nav-link {
+button.nav-link, button.logoutButton,button.nav-link.loginButton {
     color: var(--secondary-color);
-    background-color: var(--main-color);
+    background-color: rgb(158, 4, 17);
     font-size: 11;
     font: Arial;
     font-weight: bold;
-    /*box-shadow: 1px 1px 4px var(--main-color2);*/
-    border: 0;
+    box-shadow: 1px 1px 4px var(--main-color3);
+    border: 1px rgb(37, 37, 37 0.527);
     border-radius: 0;
-    background: none;
     -webkit-appearance: none;
-    box-shadow: 0;
     margin: 0%;
 }
 
-.nav-link:hover{
+button.nav-link:hover{
     background-color: var(--main-color3);
     color: var(--secondary-color);
 }
@@ -65,11 +63,12 @@ input:focus{
     outline: 2px black
 }
 .tabelle{
-    background-color: black;
-    color: greenyellow;
+    background-color: wheat;
+    color: crimson;
+    outline-color: brown;
 }
 
-.button2{
+.button3{
     color:rgba(0, 0, 0, 0.8);
     background-color: rgb(220, 220, 220);
     font-size: 11;
@@ -78,7 +77,7 @@ input:focus{
     box-shadow: 1px 1px 4px rgb(150,150,150);
     border-radius: 5px;
 }
-.button2:hover{
+.button3:hover{
     background-color: rgb(200,200,200);
 }
 .Tabelle-Einkaufslisten{
@@ -281,8 +280,8 @@ input#addItemEinheit{
 
 div#uebersicht-einkaufslisten{
     display: grid;
-    grid-template-columns: [startLeft]1fr [startCenter] minmax(320px, 1080px) [endCenter] 1fr [endRight];
-    grid-template-rows: 70pxpx auto 30px;
+    grid-template-columns: [startLeft]1fr [startCenter] minmax(300px, 1080px) [endCenter] 1fr [endRight];
+    grid-template-rows: 50px auto 30px;
 }
 h1#uebersicht-einkaufslisten{
     grid-column: startCenter / endCenter;
@@ -307,29 +306,18 @@ form#createList{
     align-self: stretch;
     background-color:var(--secondary-color3); 
     box-shadow: 3px 3px 12px rgb(150,150,150);
+}
 
-    display: grid;
-    grid-template-columns: [column1] 1fr [column2] 1fr [column3];
-    /*grid-template-rows: [row1]10px[row2] auto [row3] 10px [row4];*/
-}
-/*#createAList{
-    grid-column: column1 / column2;
-    grid-row:row2/row3;
-    place-self: center;
-    font-size: 10;
-}
+
+
+
+
+
 label#listName{
-    grid-column: column2 / column3;
-    grid-row:row2/row3;
-    justify-self: start;
-    align-self: center;
+    background-color: var(--secondary-color3);
+    font-weight: bold;
+    margin: 10px;
 }
-input#newListName{
-    grid-column: column2 / column3;
-    grid-row:row2/row3;
-    justify-self: end;
-    align-self: center;
-}*/
 
 
 table.Tabelle-Einkaufslisten{
@@ -340,7 +328,31 @@ table.Tabelle-Einkaufslisten{
     background-color:var(--secondary-color3); 
     box-shadow: 3px 3px 12px rgb(150,150,150);
 }
-
+div#shoppingList{
+    display: grid;
+    grid-template-columns: [startLeft1]1fr [startCenter1] minmax(300px, 1080px) [endCenter2] 1fr [endRight1];
+    grid-template-rows: 50px auto 30px;
+}
+#shoppingListAdd{
+    grid-column: startCenter1 / startCenter2;
+    grid-row: 1 / 2;
+    justify-self: start;
+    align-self: center;
+}
+#shoppingListDelete{
+    grid-column: startCenter1 / endCenter2;
+    grid-row: 1 / 2;
+    justify-self: end;
+    align-self: center;
+}
+#shoppingListTable{
+    grid-column: startCenter1 / endCenter2;
+    grid-row: 2 / 3;
+    justify-self: stretch;
+    align-self: stretch;
+    background-color:var(--secondary-color3); 
+    box-shadow: 3px 3px 12px rgb(150,150,150);
+}
 
 @media(max-width:320px){
     *{
@@ -351,5 +363,12 @@ table.Tabelle-Einkaufslisten{
     }
     form#createList, table.Tabelle-Einkaufslisten{
         box-shadow: 0px 0px 0px;
+    }
+    table.Tabelle-Einkaufslisten{
+        background-color: rgb(100, 100, 100);
+    }
+    #shoppingListTable{
+        background-color:rgb(100, 100, 100);
+        box-shadow:0px 0px 0px;
     }
 }

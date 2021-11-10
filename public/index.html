@@ -11,12 +11,12 @@
 <body>
   <nav class="header">
     <button class="nav-link" onclick="gotoPage('/einkaufsliste/üebersicht')">Übersicht Einkaufsliste</button>
-    <button class="nav-link, loginButton" onclick="gotoPage('/login')">Login</button>
-    <button class="logoutButton" onclick="logout()" hidden>Abmelden</button>
+    <button class="nav-link" id="loginButton" onclick="gotoPage('/login')">Anmelden</button>
+    <button class="nav-link" id="logoutButton" onclick="logout()" hidden>Abmelden</button>
   </nav>
   <article class="page" id="uebersicht-einkaufslisten" hidden>
     <div id="uebersicht-einkaufslisten">
-      <h1 id="uebersicht-einkaufslisten">Einkaufslisten Übersicht</h1>
+      <h1 id="uebersicht-einkaufslisten">Einkaufslisten</h1>
       <table class="Tabelle-Einkaufslisten">
         <tr id="uebersicht-einkaufslisten">
           <th>Einkaufsliste</th>
@@ -25,8 +25,6 @@
       </table>
       <button type="button" class="btn btn-default" id="createList" onclick="showListAdd(event)">Liste erstellen</button>
       <form name="addList-form" id="createList"onsubmit="addList(event)" hidden>
-        <label id="createAList" for="user">Erstellen Sie eine Liste!</label>
-        <div></div>
         <label id="listName"for="user">Neue Liste:</label>
         <input class="input" id="newListName"type="text" name="listName"/>
       </form>
@@ -42,7 +40,7 @@
         <input class="input" id="inputPassword" type="password" name="password">
         <button id="buttonLogin" type="submit" name="login-submit">Absenden</button>
         <button class="nav-link2" id="buttonRegister" onclick="gotoPage('/register')">Registrierung</button>
-        <img src="list.png" alt="Logo"id="logo" width="50px" height="50px">
+        <img src="list.png" alt="Logo"id="logo" width="75px" height="50px">
      </form>
     </div>
   </article>
@@ -57,22 +55,24 @@
         <label id="labelPassword2R" for="password2">Passwort wiederholen:</label>
         <input id="inputPassword2R" type="password" name="password2">     
         <button id="buttonRegisterSubmit" type="submit" name="register-submit">Absenden</button>
-        <img src="list.png" alt="Logo" id="logo" width="50px" height="50px">
+        <img src="list.png" alt="Logo" id="logo" width="75px" height="50px">
       </form>
     </div>
   </article>
   <article class="page" id="shoppingList" hidden>
-    <button class="button2" onclick="openAddItem()">Item Hinzufügen</button>
-    <button class="buttonDeleteList" onclick="deleteActiveList()">Liste Löschen</button>
-    <table class="tabelle">
-      <tr>
-        <th>Bezeichnung</th>
-        <th>Menge</th>
-        <th>Einheit</th>
-        <th>Erledigt</th>
-        <th></th>
-      </tr>
-    </table>
+    <div id="shoppingList">
+      <button class="button2" id="shoppingListAdd" onclick="openAddItem()">Item Hinzufügen</button>
+      <button class="buttonDeleteList" id="shoppingListDelete" onclick="deleteActiveList()">Liste Löschen</button>
+      <table class="tabelle" id="shoppingListTable">
+        <tr>
+          <th>Bezeichnung</th>
+          <th>Menge</th>
+          <th>Einheit</th>
+          <th>Erledigt</th>
+          <th></th>
+        </tr>
+      </table>
+    </div>
   </article>
   <article class="page" id="addItem" hidden>
     <div id="addItem">
@@ -86,7 +86,7 @@
         <input class ="inputadditem" type="text" name="einheit" id="addItemEinheit">
         <button id="addItemButton" name="addItem-submit"> Erstellen</button>
       </form>
-        <button class="button2" id="buttonBack" onclick="backToList()">zurück</button>
+        <button class="button3" id="buttonBack" onclick="backToList()">zurück</button>
     </div>
   </article>
   
