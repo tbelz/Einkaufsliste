@@ -16,7 +16,8 @@ async function getJSon(path) {
       method: "POST",
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "credentials": "same-origin"
       },
       body: JSON.stringify(obj)
     });
@@ -35,7 +36,8 @@ async function getJSon(path) {
       body: JSON.stringify(obj),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "credentials": "same-origin"
       }
     });
     if (result.ok) {

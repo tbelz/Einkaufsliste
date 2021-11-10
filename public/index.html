@@ -11,62 +11,55 @@
 <body>
   <nav class="header">
     <button class="nav-link" onclick="gotoPage('/einkaufsliste/üebersicht')">Übersicht Einkaufsliste</button>
-    <button class="nav-link" onclick="gotoPage('/login')">Login</button>
-    
+    <button class="nav-link, loginButton" onclick="gotoPage('/login')">Login</button>
+    <button class="logoutButton" onclick="logout()" hidden>Abmelden</button>
   </nav>
   <article class="page" id="uebersicht-einkaufslisten" hidden>
-    <h1>Einkaufslisten Übersicht</h1>
-    <table class="Tabelle-Einkaufslisten">
-      <tr>
-        <th>Einkaufsliste</th>
-        <th>Offene Items</th>
-      </tr>
-    </table>
-    <button type="button" class="btn btn-default" onclick="showListAdd(event)">Liste erstellen</button>
-    <form name="addList-form" onsubmit="addList(event)" hidden>
-      <div class="grid-item">
-        <label for="user">Name:</label>
-        <input class="input" type="text" name="listName"/>
-      </div>
-    </form>
+    <div id="uebersicht-einkaufslisten">
+      <h1 id="uebersicht-einkaufslisten">Einkaufslisten Übersicht</h1>
+      <table class="Tabelle-Einkaufslisten">
+        <tr id="uebersicht-einkaufslisten">
+          <th>Einkaufsliste</th>
+          <th>Offene Items</th>
+        </tr>
+      </table>
+      <button type="button" class="btn btn-default" id="createList" onclick="showListAdd(event)">Liste erstellen</button>
+      <form name="addList-form" id="createList"onsubmit="addList(event)" hidden>
+        <label id="createAList" for="user">Erstellen Sie eine Liste!</label>
+        <div></div>
+        <label id="listName"for="user">Neue Liste:</label>
+        <input class="input" id="newListName"type="text" name="listName"/>
+      </form>
+    </div>
   </article>
   <article class="page" id="login" hidden>
-    <h1>Anmeldung</h1>
-    <form class="grid-container" name="login-form" onsubmit="login(event)">
-      <div class="grid-item">
-        <label for="user">Benutzername:</label>
-        <input class="input" type="text" name="user"/>
-      </div>
-      <div class="grid-item">
-        <label for="password">Passwort:</label>
-        <input class="input" type="password" name="password">
-      </div>
-      <div class="grid-item">
-        <button type="submit" name="login-submit">Absenden</button>
-      </div>
-    </form>
-    <div class="gird-item2">
-      <button class="nav-link2" onclick="gotoPage('/register')">Registrierung</button>
+    <div id="login">
+      <h1 id="login">Anmeldung</h1>
+      <form class="grid-container" id="login" name="login-form" onsubmit="login(event)">
+        <label id="labelUser" for="user">Benutzername:</label>
+        <input class="input" id="inputUser" type="text" name="user"/>
+        <label id="labelPassword" for="password">Passwort:</label>
+        <input class="input" id="inputPassword" type="password" name="password">
+        <button id="buttonLogin" type="submit" name="login-submit">Absenden</button>
+        <button class="nav-link2" id="buttonRegister" onclick="gotoPage('/register')">Registrierung</button>
+        <img src="list.png" alt="Logo"id="logo" width="50px" height="50px">
+     </form>
     </div>
   </article>
   <article class="page" id="register" hidden>
-    <form class="grid-container" name="register-form" onsubmit="register(event)">
-      <div class="grid-item">
-        <label for="user">Benutzername:</label>
-        <input type="text" name="user"/>
-      </div>
-      <div class="grid-item">
-        <label for="password1">Passwort</label>
-        <input type="password" name="password1">
-      </div>
-      <div class="grid-item">
-        <label for="password2">Passwort wiederholen:</label>
-        <input type="password" name="password2">
-      </div>
-      <div class="grid-item">
-        <button type="submit" name="register-submit">Absenden</button>
-      </div>
-    </form>
+    <div id="register">
+      <h1 id="register">Registrierung</h1>
+      <form class="grid-container" id="register" name="register-form" onsubmit="register(event)">
+        <label id="labelUserR" for="user">Benutzername:</label>
+        <input id="inputUserR" type="text" name="user"/>
+        <label id="labelPassword1R" for="password1">Passwort</label>
+        <input id="inputPassword1R" type="password" name="password1">
+        <label id="labelPassword2R" for="password2">Passwort wiederholen:</label>
+        <input id="inputPassword2R" type="password" name="password2">     
+        <button id="buttonRegisterSubmit" type="submit" name="register-submit">Absenden</button>
+        <img src="list.png" alt="Logo" id="logo" width="50px" height="50px">
+      </form>
+    </div>
   </article>
   <article class="page" id="shoppingList" hidden>
     <button class="button2" onclick="openAddItem()">Item Hinzufügen</button>
@@ -82,22 +75,19 @@
     </table>
   </article>
   <article class="page" id="addItem" hidden>
-    <form class="form1" name="addItem-form" onsubmit="addItem(event)">
-      <div class="grid-label">
+    <div id="addItem">
+      <h1 id="addItem">Item Hinzufügen</h1>
+      <form class="form1" name="addItem-form" id="addItem"onsubmit="addItem(event)">
         <label class ="labeladditem" id="addItemName" for="name">Name:</label>
         <label class ="labeladditem" id="addItemMenge" for="menge">Menge:</label>
         <label class ="labeladditem" id="addItemEinheit" for="einheit" >Einheit:</label>
-      </div>
-      <div class="grid-input">
-        <input type="text" name="name" id="addItemName" required>
-        <input type="number" name="menge" id="addItemMenge" value=1 required>
-        <input type="text" name="einheit" id="addItemEinheit">
-      </div>
-      <div class="grid-button">
+        <input class ="inputadditem" type="text" name="name" id="addItemName" required>
+        <input class ="inputadditem" type="number" name="menge" id="addItemMenge" value=1 required>
+        <input class ="inputadditem" type="text" name="einheit" id="addItemEinheit">
         <button id="addItemButton" name="addItem-submit"> Erstellen</button>
-      </div>
-    </form>
-    <button class="button2" onclick="backToList()">zurück</button>
+      </form>
+        <button class="button2" id="buttonBack" onclick="backToList()">zurück</button>
+    </div>
   </article>
   
   <article class="page" id="redirect" onpageshow="gotoPage('/login')" hidden>

@@ -23,7 +23,7 @@ API
 
 
 ToDo:
--  Sinvolle Fehlermeldungen
+-  Sinvolle Fehlermeldungen: user besteht
 -  Behandlung von Ausnahmen
 -  Guard fixen
 -  logout button // hide Login

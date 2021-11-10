@@ -1,4 +1,3 @@
-
 function renderShoppingListOverviewRow(table, einkaufsliste){
   const shoppingListName = document.createElement("td");
   shoppingListName.textContent = einkaufsliste.name;
@@ -41,6 +40,7 @@ async function showList(event){
 }
 
 async function showListAdd(event) {
+  event.stopPropagation();
   const button = event.target;
   button.setAttribute('hidden', '');
   document.forms["addList-form"].removeAttribute('hidden');
@@ -48,16 +48,17 @@ async function showListAdd(event) {
 }
 
 async function addList(event){
+  event.stopPropagation();
   const form = document.forms["addList-form"];
   const listName = form.elements["listName"].value;
   if(listName == ""){
-    alert("Bitte geben Sie einen gültigen Namen für die Liste ein");  
+    alert("Fehler: Der Name der Liste darf nicht leer sein.");  
   }
   else{
     
     const result = postJson({ name: listName }, "/einkaufslisten")
     if(!result){
-      alert("Bitte geben Sie einen gültigen Namen ein")
+      alert("Fehler: Eine Liste mit dem Namen gibt es schon.")
       return;
     }
     form.setAttribute('hidden', '');
@@ -68,34 +69,56 @@ async function addList(event){
 }
 
 async function login(event){
-
+  event.stopPropagation();
+  if(event.submitter.id == "buttonRegister"){
+    return;
+  }
   const form = document.forms["login-form"];
-  const username = form.elements["user"];
-  const password = form.elements["password"];
+  const username = form.elements["user"].value;
+  const password = form.elements["password"].value;
 
   const user = {
     username: username,
     password: password
   }
-
-  if(getLogin(user)){
-    gotoPage("/")
-    
+  if(await getLogin(user)){
+    switchLoginView(true);
+    gotoPage("/");
   }
   else
   {
-    alert("Ungültiges Passwort oder Benutzer")
+    alert("Fehler: Ungültiger Benutzer oder Passwort.")
     password.reset();
   }
-
-
-
-
 }
 
-async function getLogin(body){
-  return postJson(body, "login")
+async function logout(){
+  const res = await fetch('/logout', { method: 'POST', credentials: 'same-origin' });
+  if(res.ok){
+    switchLoginView(false);
+    gotoPage("/login");
+  }
+  
 }
+
+function switchLoginView(value){
+  if(value){
+    document.querySelector(".loginButton").setAttribute('hidden', '');
+    document.querySelector(".logoutButton").removeAttribute('hidden');
+  }
+  else{
+    document.querySelector(".loginButton").removeAttribute('hidden');
+    document.querySelector(".logoutButton").setAttribute('hidden', '');
+  }
+  
+  
+}
+
+async function getLogin(user){
+  return postJson(user, "/login")
+}
+
+
 
 async function register(event){
   event.preventDefault();
@@ -105,12 +128,12 @@ async function register(event){
   const password1 = form.elements["password1"].value;
   const password2 = form.elements["password2"].value;
   if(password1 !== password2){
-    alert("Passwörter stimmen nicht überein")
+    alert("Fehler: Die Passwörter stimmen nicht überein.")
     return;
   }
 
   if(password1.length < 5){
-    alert("Passwort zu kurz")
+    alert("Fehler: Das Passwort erfüllt nicht die Mindestlänge von 5 Zeichen.")
     return;
   }
 
@@ -121,15 +144,18 @@ async function register(event){
 
   const response = await postJson(user, "/register")
   if(response == false){
-    alert("Fehler");
-    password1.reset();
-    password2.reset();
+    alert("Fehler: Der Benutzername ist bereits vergeben.");
+    form.reset();
+  
     return;
   }
   else{
-    getLogin(user);
-    gotoPage("/");
-    form.reset();
+    if(await getLogin(user));
+    {
+      switchLoginView(true);
+      gotoPage("/");
+      form.reset();
+    }
   }
 }
 
@@ -151,14 +177,13 @@ async function register(event){
 
 async function reverseGuard(params){
   const result = await fetch("/loginStatus");
-  //console.log(params);
   if(result.ok){
     const isLoggedInJson = await result.json();
-    //console.log("reverseGuard ", isLoggedInJson.isLoggedin);
+    switchLoginView(true);
     if(isLoggedInJson.isLoggedin === "true"){
-      //console.log("true-r")
       return true;
     }
+    switchLoginView(false);
     gotoPage("/login");
    return false;
   }
@@ -168,13 +193,9 @@ async function guard(params){
   const result = await fetch("/loginStatus");
   if(result.ok){
     const isLoggedInJson = await result.json();
-    //console.log("guard ", isLoggedInJson.isLoggedin);
     if(isLoggedInJson.isLoggedin === "true"){
-      //console.log("true-g")
       gotoPage("/einkaufsliste/l");
       return false;
-    
-   
     }
   return true;
   }
@@ -195,7 +216,6 @@ async function getShoppingList(listName){
 
 async function renderShoppingList(params){
   const shoppingListName = params.detail.params.liste;
-  //console.log("renderShoppingList:", shoppingListName);
   const shoppingList = await getShoppingList(shoppingListName);
   if(shoppingList){
     const table = document.querySelector(".tabelle");
@@ -274,6 +294,7 @@ function backToList() {
 
 
 async function listItemHandling(event){
+  event.stopPropagation(event);
   const row = event.target.parentElement.parentElement;
   if(event.target.className == 'delete'){
     const result = await deleteJson("/einkaufsliste/"+ activeList + "/" + row.item.art)
@@ -301,14 +322,17 @@ function deleteActiveList(){
 }
 
 
+
+
 async function addItem(event){
+  event.stopPropagation();
   const elements = document.forms["addItem-form"].elements;
   const art = elements["name"].value;
   const menge = elements["menge"].value;
   const einheit = elements["einheit"].value;
   
   if(menge == "" || art == "") {
-    alert("Bitte vervollständigen sie ihre Eingabe")
+    alert("Fehler: Bitte vervollständigen sie Ihre Eingabe.")
     return;
   }
   const item = { art: art, anzahl: menge, einheit: einheit }
@@ -317,10 +341,12 @@ async function addItem(event){
     document.forms["addItem-form"].reset();
   }
   else{
-    alert("Fehler beim hinzufügen")
+    alert("Fehler: Der Eintrag konnte nicht hinzugefügt werden.")
   }
 
 }
+
+
 
 
 document.addEventListener("DOMContentLoaded", function() {

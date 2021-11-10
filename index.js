@@ -7,7 +7,14 @@ const { readData, writeData } = require("./fileStorage.js")
 
 
 const app = express();
-app.use(cookieParser())
+app.use(cookieParser("Schhhhhhh!"))
+/*app.use(session({
+  secret: 'MYSECRET',
+  name: 'appName',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { sameSite: 'strict' }
+}))*/
 const port = 3000;
 
 const jwt = require('jsonwebtoken');
@@ -47,6 +54,7 @@ app.listen(port, () => {
 // Register & Login
 
 app.post('/register', function(req, res) {
+  console.log("adding user")
   if(validateUser(req.body)){
     if(!userExits(req.body.username)){
       users.push({username: req.body.username, passwordDerivative: derivePassword(req.body.password), listen:[]})
@@ -58,13 +66,18 @@ app.post('/register', function(req, res) {
       );
       getUser(req.body.username).token = token;
       res.status(201).json(token)
+      console.log("adding user1")
       //res.status(201).json({"sucess": "User created."})
     }
     else{
+      console.log("adding user2")
       res.status(400).json({error: "User already exits."})
     }
   }
-  else{res.status(400).json({error: "No or invalid argument for user or password."})}
+  else{
+    res.status(400).json({error: "No or invalid argument for user or password."})
+    console.log("adding user3")
+  }
 });
 
 app.post('/login', function(req, res) {
@@ -81,7 +94,7 @@ app.post('/login', function(req, res) {
           process.env.TOKEN_KEY,
           { expiresIn: "2h"}
         );
-        res.cookie("token" ,token , { maxAge: 900000, httpOnly: true });
+        res.cookie("token" ,token , { maxAge: 900000, httpOnly: true, secure: false, sameSite: "Lax" });
         getUser(req.body.username).token = token;
         //res.status(200).json({success: "Authorized"})
         res.status(200).json(token)
@@ -92,6 +105,11 @@ app.post('/login', function(req, res) {
   }
   }
   else{res.status(400).json({error: "No or invalid argument for user or password."})}
+});
+
+app.post('/logout', function(req, res) {
+  res.clearCookie("token")
+  res.sendStatus(200);
 });
 
 
@@ -133,14 +151,12 @@ function userExits(username){
 }
 
 function getUser(username){
-  //console.log(users)
   const user = users.filter(singleUser => { return singleUser.username === username});
   return user[0];
 }
 
 
 function validateUser(user){
-  console.log(user);
   return user.hasOwnProperty("username") && user.hasOwnProperty("password") &&
   typeof user.password === 'string' && typeof user.username === 'string'
   
@@ -185,7 +201,6 @@ app.get('/einkaufslisten/:name', function(req, res) {
 
 app.get('/einkaufslisten', function(req, res) {
   if(verifyCookie(req)) {
-    console.log("user:" + req.username );
     let UserEinkaufslisten = getUser(req.username).listen;
 
     res.json(UserEinkaufslisten);
@@ -238,7 +253,6 @@ app.post('/einkaufslisten', function(req, res) {
 app.delete('/einkaufslisten/:name', function(req, res){
   if(verifyCookie(req) === true){
     let lists = getUser(req.username).listen;
-    console.log(lists)
     let existingList = lists.filter(l => { return l.name == req.params.name })[0]
     if(existingList !== undefined){
         const index = lists.indexOf(existingList);
@@ -272,15 +286,15 @@ function getList(user, listName) {
 
 app.post('/einkaufslisten/:name/items', function(req, res){
     if(verifyCookie(req) === true){
-      console.log(getUser(req.username), req.username);
-      console.log(req.body);
-      console.log(req.params.name)
       let list = getList(getUser(req.username), req.params.name)
       
       if(list != null){
         if(validateItem(req.body) === true){
-          if([] !== list.einträge.filter(item => { return item.art === req.body.art })[0]){
+          const existingItemList = list.einträge.filter(item => { return item.art === req.body.art });
+          console.log(existingItemList);
+          if(existingItemList.length == 0){
             let newItem = req.body;
+            console.log(newItem);
             newItem.abgehakt = false; //einheit optional muss aber vorhanden sein
             list.einträge.push(newItem);
             res.status(200).json({
@@ -345,7 +359,9 @@ app.delete('/einkaufsliste/:name/:nameItem', function(req,res){
       error: 'Authentication is required'
     });
   }
-});
+})
+
+
 
 app.put('/einkaufsliste/:name/:nameItem', function(req,res){
   if(verifyCookie(req) === true){
@@ -379,6 +395,8 @@ app.put('/einkaufsliste/:name/:nameItem', function(req,res){
   }
   
 })
+
+
 
 app.get( "*", function( req, res ) {
   res.sendFile( pathUtils.resolve("public", "index.html" ) );

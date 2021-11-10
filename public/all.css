@@ -1,39 +1,48 @@
+:root {
+    --main-color: #b71c1c;
+    --main-color2: #f05545;
+    --main-color3: #7f0000;
+    --secondary-color: #ffffff;
+    --secondary-color2: #bbbbbb;
+    --secondary-color3: #f0f0f0;
+}
+
 *{
-    background-color: whitesmoke;
+    background-color: white;
     font-family: Arial,"Courier New", sans-serif;
 
 }
 
+
+
 .header {
-    background-color: rgb(60, 146, 245);
-    
+    background-color: var(--main-color2); 
+    padding: 0%;
 }
 
-nav { height: auto; }
-nav { min-height: 15%;}
-nav { max-height: 20rem; }
-nav { width: 100%; }
-
-body{display: grid;}
-
 .nav-link {
-    color: white;
-    background-color:rgb(6, 9, 216) ;
+    color: var(--secondary-color);
+    background-color: var(--main-color);
     font-size: 11;
     font: Arial;
     font-weight: bold;
-    box-shadow: 1px 1px 4px rgb(150,150,150);
-    border-radius: 5px;
+    /*box-shadow: 1px 1px 4px var(--main-color2);*/
+    border: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-appearance: none;
+    box-shadow: 0;
+    margin: 0%;
 }
 
 .nav-link:hover{
-    background-color: rgb(4, 7, 161) ;
-    color: white;
+    background-color: var(--main-color3);
+    color: var(--secondary-color);
 }
 
 submit, button{
-    color:rgba(0, 0, 0, 0.8);
-    background-color: rgb(220, 220, 220);
+    color: var(--main-color);
+    background-color: var(--secondary-color);
     font-size: 11;
     font: Arial;
     font-weight: bold;
@@ -42,21 +51,21 @@ submit, button{
 }
 
 submit:hover, button:hover{
-    background-color: rgba(252, 192, 30, 0.8) ;
-    color: rgb(0,0,0);
+    background-color: var(--main-color2);
+    color: var(--secondary-color2);
     outline: 2px rgba(0,0,0,0.8);
 }
 
 input {
-    background-color: rgb(220, 220, 220);
+    background-color: var(--secondary-color2);
 }
 
 input:focus{
-    background-color: rgb(180, 180, 180);
-    outline: 2px goldenrod;
+    background-color: var(--secondary-color2);
+    outline: 2px black
 }
 .tabelle{
-    background-color: burlywood;
+    background-color: black;
     color: greenyellow;
 }
 
@@ -72,98 +81,275 @@ input:focus{
 .button2:hover{
     background-color: rgb(200,200,200);
 }
-/*.grid-container{
-    display:grid;
-    /* 4 Columns
-    grid-template-columns: 80px 200px auto 40px;
-    grid-column-gap: 10px;
-    /* 2 Rows
-    grid-template-rows: 80px 1fr;
-    height: 75vh; width: 75vw;
-    margin: 10vh auto;
-
+.Tabelle-Einkaufslisten{
+    color: crimson;
+    background-color: wheat;
+    outline-color: brown;
 }
-.grid-item{
-
+.shoppingListInfo:hover{
+    color: rgb(139, 0, 28);
+    font-weight: bold;
 }
-.grid-item2{
-    grid-column-start: 1;
-    grid-column-end: 3;
-    grid-row-start: 1;
-     grid-row-end: 3;
-}
-.page{
-    display:grid;
-    grid-template-columns: 80px 200px auto 40px;
-    grid-column-gap: 10px;
-    grid-template-rows: 80px 1fr;
-    height: 75vh; width: 75vw;
-    margin: 10vh auto;
-}*/
-
 .fa-trash{
     pointer-events: none;
 }
 
-.form1{
+div#login,div#register,div#addItem{
     display: grid;
-    padding: 1em;
-    background: #acacac;
-    border: 1px solid #5a5a5a;
-    margin: 2rem auto 0 auto;
-    max-width: 600px;
-    padding: 1em;
+    grid-template-columns: [line1] 1fr [line2] minmax(300px, 1fr) [line3] 1fr [line4];
+    grid-template-rows: [rowHeader] 50px [rowCenter1]1fr [rowCenter2] 50px [rowFooter];
+}
+h1#login,h1#register,h1#addItem{
+    grid-column-start: line2;
+    grid-column-end: line3;
+    grid-row-start: rowHeader;
+    grid-row-end: rowCenter1;
+    place-self: center;
+    color: black;
+    font-size: large;
+    font-style: bold;
+}
+#buttonBack{
+    grid-column: line2 / line3;
+    grid-row: rowCenter2 / rowFooter;
+    justify-self: center;
+    align-self: start; 
+    margin: 30px;
 }
 
-.labeladdItem {
-    padding: 0.5em 0.5em 0.5em 0;
-    background-color: tomato;
+form#login{
+    grid-column: line2 / line3;
+    grid-row: rowCenter1 / rowCenter2;
+    border: 1px solid black;
+    background-color: var(--secondary-color3);
+    display:grid;
+    grid-template-columns: [columnStart]15px[columnStuffStart] minmax(100px,auto) [columnStuffEnd]15px[columnEnd];
+    grid-template-rows: [rowStart] 10px [rowLogo]50px[rowLogoEnd rowLabelUser] 20px [rowLabelUserEnd rowInputUser]25px[rowInputUserEnd rowLabelPassword] 20px [rowLabelPasswordEnd rowInputPassword] 50px [rowInputPasswordEnd rowButtonLogin]20px [rowButtonLoginEnd rowText] 20px [rowTextEnd rowButtonRegister] 20px [rowButtonRegisterEnd] 10px [rowEnd]; 
 }
-input#addItemName,input#addItemMenge,input#addItemEinheit {
-    padding: 0.7em;
-    margin-bottom: 0.5rem;
-    border: 1px solid #9c9c9c;
+#labelUser{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowLabelUser / rowLabelUserEnd;
+    justify-self: start;
+    align-self: start;
+    background-color: var(--secondary-color3);
+}
+#inputUser{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowInputUser / rowInputUserEnd;
+    justify-self: stretch;
+    align-self: start;
+}
+#labelPassword{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowLabelPassword / rowLabelPasswordEnd;
+    justify-self: start;
+    align-self: start;
+    background-color: var(--secondary-color3);
+}
+#inputPassword{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowInputPassword / rowInputPasswordEnd;
+    justify-self: stretch;
+    align-self: start;
+}
+#buttonLogin{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowButtonLogin / rowButtonLoginEnd;
+    justify-self: stretch;
+    align-self: stretch;
+}
+#buttonRegister{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowButtonRegister / rowButtonRegisterEnd;
+    justify-self: stretch;
+    align-self: stretch;
+}
+#logo{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowLogo / rowLogoEnd;
+    place-self: center;
+}
+
+
+
+form#register{
+    grid-column: line2 / line3;
+    grid-row: rowCenter1 / rowCenter2;
+    border: 1px solid black;
+    background-color: var(--secondary-color3);
+
+    display:grid;
+    grid-template-columns: [columnStart]15px[columnStuffStart] minmax(100px,auto) [columnStuffEnd]15px[columnEnd];
+    grid-template-rows: [rowStart] 10px [rowLogo]50px[rowLogoEnd rowLabelUserR] 20px [rowLabelUserREnd rowInputUserR]25px[rowInputUserREnd rowLabelPasswordR] 20px [rowLabelPasswordREnd rowInputPasswordR] 25px [rowInputPasswordEndR rowLabelRepeatPassword]20px [rowLabelRepeatPasswordEnd rowInputRepeatPassword] 50px [rowInputRepeatPasswordEnd rowCreateAccount] 20px [rowCreateAccountEnd] 10px [rowEnd]; 
+}
+#labelUserR{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowLabelUserR / rowLabelUserREnd;
+    justify-self: start;
+    align-self: start;
+    background-color: var(--secondary-color3);
+}
+#inputUserR{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowInputUserR / rowInputUserREnd;
+    justify-self: stretch;
+    align-self: start;
+}
+#labelPassword1R{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowLabelPasswordR / rowLabelPasswordREnd;
+    justify-self: start;
+    align-self: start;
+    background-color: var(--secondary-color3);
+}
+#inputPassword1R{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowInputPasswordR / rowInputPasswordREnd;
+    justify-self: stretch;
+    align-self: start;
+}
+#labelPassword2R{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowLabelRepeatPassword / rowLabelRepeatPasswordEnd;
+    justify-self: start;
+    align-self: start;
+    background-color: var(--secondary-color3);
+}
+#inputPassword2R{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowInputRepeatPassword / rowInputRepeatPasswordEnd;
+    justify-self: stretch;
+    align-self: start;
+}
+#buttonRegisterSubmit{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowCreateAccount / rowCreateAccountEnd;
+    justify-self: stretch;
+    align-self: stretch;
+}
+#logo{
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowLogo / rowLogoEnd;
+    place-self: center;
+}
+
+
+form#addItem{
+    grid-column: line2 / line3;
+    grid-row: rowCenter1 / rowCenter2;
+    border: 1px solid black;
+    background-color: var(--secondary-color3);
+    display:grid;
+    grid-template-columns: [columnStart]15px[columnStuffStart] minmax(100px,auto) [columnStuffEnd]15px[columnEnd];
+    grid-template-rows: [rowStart] 10px [rowLogo]50px[rowLogoEnd rowLabelName] 20px [rowLabelNameEnd rowInputName]25px[rowInputNameEnd rowLabelMenge] 20px [rowLabelMengeEnd rowInputMenge] 25px [rowInputMenge rowLabelEinheit]20px [rowLabelEinheitEnd rowInputEinheit] 50px [rowInputEinheitEnd rowCreateItem] 20px [rowCreateItemEnd rowButtonBack] 20px [rowButtonBackEnd] 10px [rowEnd]; 
+}
+.inputadditem{
+    grid-column: columnStuffStart / columnStuffEnd;
+    justify-self: stretch;
+    align-self: start;
+}
+.labeladditem{
+    grid-column: columnStuffStart / columnStuffEnd;
+    justify-self: start;
+    align-self: start;
+    background-color: var(--secondary-color3);
+}
+label#addItemName{
+    grid-row: rowLabelName / rowLabelNameEnd;
+}
+label#addItemMenge{
+    grid-row: rowLabelMenge / rowLabelMengeEnd ;
+}
+label#addItemEinheit{
+    grid-row: rowLabelEinheit / rowLabelEinheitEn ;
+}
+input#addItemName{
+    grid-row: rowInputName / rowInputNameEnd ;
+}
+input#addItemMenge{
+    grid-row: rowInputMenge / rowInputMengeEnd ;
+}
+input#addItemEinheit{
+    grid-row: rowInputEinheit / rowInputEinheitEnd ;
 }
 #addItemButton{
-    padding: 0.7em;
-    width: 100%;
-    border: 0;
+    grid-column: columnStuffStart / columnStuffEnd;
+    grid-row: rowCreateItem / rowCreateItemEnd;
+    justify-self: stretch;
+    align-self: stretch;
 }
 
-    .form1 {
-        max-width: 400px;
-      grid-template-columns: 80px 200px auto 40px;
-      grid-template-rows: 80px 1fr;
-      grid-gap: 10px;
-    }
-  
-    .labeladdItem {
-      text-align: right;
-      grid-column: 1 / 2;
-    }
-  
-    input#addItemName,input#addItemMenge,input#addItemEinheit,
-    #addItemButton {
-        grid-column: 2 / 3;
-    }
-    #addItemName{
-        grid-row: 1 / 2;
-    }
-    #addItemMenge{
-        grid-row: 2 / 3;
-    }
-    #addItemEinheit{
-        grid-row: 3 / 4;
-    }
-    #addItemButton{
-        grid-row: 4 / 5;
-    }
-
-
-@media (orientation:portrait){
+div#uebersicht-einkaufslisten{
+    display: grid;
+    grid-template-columns: [startLeft]1fr [startCenter] minmax(320px, 1080px) [endCenter] 1fr [endRight];
+    grid-template-rows: 70pxpx auto 30px;
+}
+h1#uebersicht-einkaufslisten{
+    grid-column: startCenter / endCenter;
+    grid-row: 1 / 2;
+    justify-self: start;
+    align-self: center;
+    font-size: medium;
+    font-style: normal;
 
 }
-@media (orientation:landscape){
+button#createList{
+    grid-column: startCenter / endCenter;
+    grid-row: 1 / 2;
+    justify-self: end;
+    align-self: center;
 
 }
+form#createList{
+    grid-column: startCenter / endCenter;
+    grid-row: 2 / 3;
+    justify-self: stretch;
+    align-self: stretch;
+    background-color:var(--secondary-color3); 
+    box-shadow: 3px 3px 12px rgb(150,150,150);
 
+    display: grid;
+    grid-template-columns: [column1] 1fr [column2] 1fr [column3];
+    /*grid-template-rows: [row1]10px[row2] auto [row3] 10px [row4];*/
+}
+/*#createAList{
+    grid-column: column1 / column2;
+    grid-row:row2/row3;
+    place-self: center;
+    font-size: 10;
+}
+label#listName{
+    grid-column: column2 / column3;
+    grid-row:row2/row3;
+    justify-self: start;
+    align-self: center;
+}
+input#newListName{
+    grid-column: column2 / column3;
+    grid-row:row2/row3;
+    justify-self: end;
+    align-self: center;
+}*/
+
+
+table.Tabelle-Einkaufslisten{
+    grid-column: startCenter / endCenter;
+    grid-row: 2 / 3;
+    justify-self: stretch;
+    align-self: stretch;
+    background-color:var(--secondary-color3); 
+    box-shadow: 3px 3px 12px rgb(150,150,150);
+}
+
+
+@media(max-width:320px){
+    *{
+        background-color:var(--secondary-color3); 
+    }
+    form#login,form#addItem,form#register{
+        border: 0px transparent;
+    }
+    form#createList, table.Tabelle-Einkaufslisten{
+        box-shadow: 0px 0px 0px;
+    }
+}
